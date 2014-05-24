@@ -48,7 +48,7 @@ Then, when the command finish, you'll get a admin mail like this::
 
 
 Required settings
------------------
+=================
 
 First, Add a line 'reportmail' to INSTALLEDAPPS to register this library for your project:
 
@@ -68,3 +68,22 @@ Because the above 'apply_reporter' will send the report mail to ADMINS on settin
     ADMINS = (
         ('Hiroki KIYOHARA', 'hirokiky@gmail.com'),
     )
+
+
+Versions
+========
+
+Python:
+
+* 2.7
+* 3.3
+
+Django:
+
+* 1.6
+
+Resources
+=========
+
+* `Github <https://github.com/hirokiky/django-reportmail/>`_
+* `PyPI <http://pypi.python.org/pypi/django-reportmail>`_
