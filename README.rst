@@ -46,3 +46,25 @@ Then, when the command finish, you'll get a admin mail like this::
         Line4: processed {'somefield': 'somevalue3'}
         ...
 
+
+Required settings
+-----------------
+
+First, Add a line 'reportmail' to INSTALLEDAPPS to register this library for your project:
+
+.. code-block:: python
+
+    INSTALLED_APPS = (
+        ...
+        'reportmail',
+    )
+
+
+And also you need to set 'ADMINS' settings.
+Because the above 'apply_reporter' will send the report mail to ADMINS on settings.
+
+.. code-block:: python
+
+    ADMINS = (
+        ('Hiroki KIYOHARA', 'hirokiky@gmail.com'),
+    )
