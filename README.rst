@@ -35,9 +35,23 @@ Then, when the command finish, you'll get a admin mail like this::
     Subject:
         Title
     Body:
+        Report of someapp.management.commands.some_of_your_command
+        args: path/to/somecsv.csv
+        options:
+
+        result:
         Line1: processed {'somefield': 'somevalue0'}
         Line2: processed {'somefield': 'somevalue1'}
         Line3: processed {'somefield': 'somevalue2'}
         Line4: processed {'somefield': 'somevalue3'}
         ...
 
+Write your own mail template
+============================
+
+You can change the template of report mails.
+
+
+Context:
+
+* sorted_text

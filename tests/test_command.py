@@ -7,22 +7,34 @@ class TestReporter(TestCase):
         from reportmail.command import apply_reporter
         return apply_reporter(*args)
 
-    @override_settings(ADMINS=(('admin', 'admin@example.com'),))
+    @override_settings(ADMINS=(('admin', 'admin@example.com'),),
+                       EMAIL_SUBJECT_PREFIX="")
     def test__it(self):
-        wrapper = self._makeOne("Title", 'reportmail/test/report.txt')
+        class DummySelf(object):
+            __module__ = '__module__'
+        wrapper = self._makeOne("Title")
 
         def wrapped(self, reporter, *args, **options):
             reporter.append("Stored")
-            return self, reporter, args, options
+            return reporter, args, options
 
-        s, r, a, o = wrapper(wrapped)('self', 'arg', test='option')
-        self.assertEqual(s, 'self')
+        r, a, o = wrapper(wrapped)(DummySelf(), 'arg', test='option')
         self.assertEqual(r.subject, "Title")
-        self.assertEqual(r.template, 'reportmail/test/report.txt')
-        self.assertEqual(r.base_context, {'args': a, 'options': o})
+        self.assertEqual(r.template, 'reportmail/command_report.txt')
+        self.assertEqual(r.base_context, {'args': a, 'options': o,
+                                          'command': '__module__'})
         self.assertEqual(r.stored_text, ["Stored"])
         self.assertEqual(a, ('arg',))
         self.assertEqual(o, {'test': 'option'})
 
         from django.core import mail
         self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'Title')
+        self.assertEqual(mail.outbox[0].body, """\
+Report of __module__
+args: arg,
+options: test=option
+
+result:
+Stored
+""")

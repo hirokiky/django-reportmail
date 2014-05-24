@@ -1,0 +1,7 @@
+Report of {{ command }}
+args: {% for arg in args %}{{ arg }},{% endfor %}
+options: {% for k, v in options.items %}{{ k }}={{ v }}{% endfor %}
+
+result:
+{% for text in stored_text %}{{ text }}
+{% endfor %}
