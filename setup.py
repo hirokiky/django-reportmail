@@ -10,7 +10,7 @@ setup(
     author_email='hirokiky@gmail.com',
     description='django library to render and send report mail. ',
     install_requires=[
-        'Django',
+        'Django>=1.6,<1.7',
     ],
     include_package_data=True,
     zip_safe=False,
