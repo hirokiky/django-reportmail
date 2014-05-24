@@ -14,7 +14,7 @@ setup(
     author='hirokiky',
     author_email='hirokiky@gmail.com',
     description='django library to render and send report mail. ',
-    loag_description=README,
+    long_description=README,
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: MIT License",
