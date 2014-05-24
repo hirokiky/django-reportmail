@@ -23,7 +23,7 @@ class TestReporter(TestCase):
         self.assertEqual(target.stored_text, ['stored text 1', 'stored text 2'])
 
     def test__render(self):
-        target = self._makeOne("", 'reportmail/report.txt')
+        target = self._makeOne("", 'reportmail/test/report.txt')
         target.stored_text = ["test1", "test2"]
         target.base_context['additional'] = 'additional'
         actual = target.render()
@@ -36,7 +36,7 @@ class TestConsoleReporter(TestReporter):
         return ConsoleReporter
 
     def test__commit(self):
-        target = self._makeOne("Console", 'reportmail/report.txt')
+        target = self._makeOne("Console", 'reportmail/test/report.txt')
         target.append("This is test 1")
         target.append("This is test 2")
 
@@ -61,7 +61,7 @@ class TestAdminEmailReporter(TestReporter):
                        ADMINS=(('Admin', 'admin@example.com'),),
                        EMAIL_SUBJECT_PREFIX="")
     def test__commit(self):
-        target = self._makeOne("Admin mail", 'reportmail/report.txt')
+        target = self._makeOne("Admin mail", 'reportmail/test/report.txt')
         target.append("This is test 1")
         target.append("This is test 2")
         target.commit()
