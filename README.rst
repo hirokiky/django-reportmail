@@ -46,12 +46,3 @@ Then, when the command finish, you'll get a admin mail like this::
         Line4: processed {'somefield': 'somevalue3'}
         ...
 
-Write your own mail template
-============================
-
-You can change the template of report mails.
-
-
-Context:
-
-* sorted_text
