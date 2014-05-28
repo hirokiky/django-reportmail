@@ -1,12 +1,12 @@
 Changes
 =======
 
-1.1 (2014-05-26)
+1.1 (2014-05-28)
 ----------------
 
 * Fixed the wrong attribute name of Reporter (comitter => committer)
 
-1.0 (2014-05-26)
+1.0 (2014-05-28)
 ----------------
 
 Initial release
