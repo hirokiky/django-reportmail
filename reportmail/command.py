@@ -1,7 +1,7 @@
 from functools import wraps
 import traceback
 
-from reportmail.reporter import AdminEmailReporter
+from reportmail.reporter import Reporter
 
 
 def apply_reporter(subject, template='reportmail/command_report.txt'):
@@ -20,9 +20,9 @@ def apply_reporter(subject, template='reportmail/command_report.txt'):
     def wrapper(handle_func):
         @wraps(handle_func)
         def wrapped(self, *args, **options):
-            with AdminEmailReporter(subject, template,
-                                    base_context={'args': args, 'options': options,
-                                                  'command': self.__module__}) as reporter:
+            with Reporter(subject, template,
+                          base_context={'args': args, 'options': options,
+                                        'command': self.__module__}) as reporter:
                 try:
                     ret = handle_func(self, reporter, *args, **options)
                 except Exception as e:

@@ -4,11 +4,12 @@ from django.template.loader import get_template
 
 
 class Reporter(object):
-    def __init__(self, subject, template, base_context=None):
+    def __init__(self, subject, template, base_context=None, committer=None):
         self.subject = subject
         self.template = template
         self.stored_text = []
         self.base_context = base_context if base_context is not None else {}
+        self.comitter = committer if committer is not None else admin_mail_comitter
 
     def __enter__(self):
         return self
@@ -36,15 +37,13 @@ class Reporter(object):
     def commit(self):
         """ A interface to send the report
         """
-        raise NotImplementedError
+        self.comitter(self.subject, self.render())
 
 
-class ConsoleReporter(Reporter):
-    def commit(self):
-        print(self.subject)
-        print(self.render())
+def console_comitter(subject, body):
+    print(subject)
+    print(body)
 
 
-class AdminEmailReporter(Reporter):
-    def commit(self):
-        mail_admins(self.subject, self.render(), fail_silently=True)
+def admin_mail_comitter(subject, body):
+    mail_admins(subject, body, fail_silently=True)

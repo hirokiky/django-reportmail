@@ -29,46 +29,49 @@ class TestReporter(TestCase):
         actual = target.render()
         self.assertEqual(actual, "test1\ntest2\n\nadditional\n")
 
+    def test__commit(self):
+        self.actual_subject = None
+        self.actual_body = None
 
-class TestConsoleReporter(TestReporter):
-    def _getTarget(self):
-        from reportmail.reporter import ConsoleReporter
-        return ConsoleReporter
+        def dummy_committer(subject, body):
+            self.actual_subject = subject
+            self.actual_body = body
+
+        target = self._makeOne("subject", 'reportmail/test/report.txt', committer=dummy_committer)
+        target.stored_text = ["test1", "test2"]
+        target.commit()
+        self.assertEqual(self.actual_subject, "subject")
+        self.assertEqual(self.actual_body, "test1\ntest2\n\n\n")
+
+
+class TestConsoleCommitter(TestCase):
+    def _callFUT(self, *args, **kwargs):
+        from reportmail.reporter import console_comitter
+        return console_comitter(*args, **kwargs)
 
     def test__commit(self):
-        target = self._makeOne("Console", 'reportmail/test/report.txt')
-        target.append("This is test 1")
-        target.append("This is test 2")
-
         with OutputCapture() as output:
-            target.commit()
+            self._callFUT("subject", "body")
 
         output.compare("""\
-Console
-This is test 1
-This is test 2
+subject
+body""")
 
 
-""")
-
-
-class TestAdminEmailReporter(TestReporter):
-    def _getTarget(self):
-        from reportmail.reporter import AdminEmailReporter
-        return AdminEmailReporter
+class TestAdminMailCommitter(TestCase):
+    def _callFUT(self, *args, **kwargs):
+        from reportmail.reporter import admin_mail_comitter
+        return admin_mail_comitter(*args, **kwargs)
 
     @override_settings(SERVER_EMAIL='server@example.com',
                        ADMINS=(('Admin', 'admin@example.com'),),
                        EMAIL_SUBJECT_PREFIX="")
     def test__commit(self):
-        target = self._makeOne("Admin mail", 'reportmail/test/report.txt')
-        target.append("This is test 1")
-        target.append("This is test 2")
-        target.commit()
+        self._callFUT("Admin mail", "This is test")
 
         from django.core import mail
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].from_email, 'server@example.com')
         self.assertEqual(mail.outbox[0].to, ['admin@example.com'])
         self.assertEqual(mail.outbox[0].subject, "Admin mail")
-        self.assertEqual(mail.outbox[0].body, "This is test 1\nThis is test 2\n\n\n")
+        self.assertEqual(mail.outbox[0].body, "This is test")
