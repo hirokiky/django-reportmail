@@ -3,20 +3,20 @@ from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
-
+CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 setup(
     name='django-reportmail',
-    version='1.0b1',
-    packages=find_packages('reportmail'),
+    version='1.0',
+    packages=['reportmail'],
     url='https://github.com/hirokiky/django-reportmail',
     license='MIT',
     author='hirokiky',
     author_email='hirokiky@gmail.com',
     description='django library to render and send report mail. ',
-    long_description=README,
+    long_description=README + '\n\n' + CHANGES,
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
         "Environment :: Web Environment",
         "Programming Language :: Python :: 2.7",
