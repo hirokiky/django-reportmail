@@ -1,5 +1,5 @@
 import os
-from setuptools import setup, find_packages
+from setuptools import setup
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
@@ -7,7 +7,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 setup(
     name='django-reportmail',
-    version='1.0',
+    version='1.1',
     packages=['reportmail'],
     url='https://github.com/hirokiky/django-reportmail',
     license='MIT',
