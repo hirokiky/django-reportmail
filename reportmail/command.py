@@ -10,7 +10,7 @@ def apply_reporter(subject, template='reportmail/command_report.txt'):
     You can use thin as decorator for Command.handle.
     and decorated handle() will get admin mail reporter objects as first argument::
 
-        @reporter("Title of report", 'path/to/template.txt')
+        @apply_reporter("Title of report", 'path/to/template.txt')
         def handle(reporter, *args, **options):
             ...
 
