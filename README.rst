@@ -85,5 +85,6 @@ Django:
 Resources
 =========
 
+* `Documentation <http://django-reportmail.readthedocs.org/>`_
 * `Github <https://github.com/hirokiky/django-reportmail/>`_
 * `PyPI <http://pypi.python.org/pypi/django-reportmail>`_
