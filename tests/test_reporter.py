@@ -46,8 +46,8 @@ class TestReporter(TestCase):
 
 class TestConsoleCommitter(TestCase):
     def _callFUT(self, *args, **kwargs):
-        from reportmail.reporter import console_comitter
-        return console_comitter(*args, **kwargs)
+        from reportmail.reporter import console_committer
+        return console_committer(*args, **kwargs)
 
     def test__commit(self):
         with OutputCapture() as output:
@@ -60,8 +60,8 @@ body""")
 
 class TestAdminMailCommitter(TestCase):
     def _callFUT(self, *args, **kwargs):
-        from reportmail.reporter import admin_mail_comitter
-        return admin_mail_comitter(*args, **kwargs)
+        from reportmail.reporter import admin_mail_committer
+        return admin_mail_committer(*args, **kwargs)
 
     @override_settings(SERVER_EMAIL='server@example.com',
                        ADMINS=(('Admin', 'admin@example.com'),),

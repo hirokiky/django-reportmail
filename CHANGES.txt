@@ -1,6 +1,14 @@
 Changes
 =======
 
+1.2 (2014-06-07)
+----------------
+
+* Fixed wrong function names of committer (comitter => committer)
+
+  * `reportmail.reporter.console_comitter` is now renamed as `reportmail.reporter.console_committer`
+  * `reportmail.reporter.admin_mail_comitter` is now renamed as `reportmail.reporter.admin_mail_committer`
+
 1.1 (2014-05-28)
 ----------------
 

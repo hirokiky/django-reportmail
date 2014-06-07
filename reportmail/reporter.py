@@ -9,7 +9,7 @@ class Reporter(object):
         self.template = template
         self.stored_text = []
         self.base_context = base_context if base_context is not None else {}
-        self.committer = committer if committer is not None else admin_mail_comitter
+        self.committer = committer if committer is not None else admin_mail_committer
 
     def __enter__(self):
         return self
@@ -40,10 +40,10 @@ class Reporter(object):
         self.committer(self.subject, self.render())
 
 
-def console_comitter(subject, body):
+def console_committer(subject, body):
     print(subject)
     print(body)
 
 
-def admin_mail_comitter(subject, body):
+def admin_mail_committer(subject, body):
     mail_admins(subject, body, fail_silently=True)
