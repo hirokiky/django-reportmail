@@ -2,13 +2,13 @@ from django.test import TestCase
 from django.test.utils import override_settings
 
 
+@override_settings(ADMINS=(('admin', 'admin@example.com'),),
+                   EMAIL_SUBJECT_PREFIX="")
 class TestReporter(TestCase):
     def _makeOne(self, *args):
         from reportmail.command import apply_reporter
         return apply_reporter(*args)
 
-    @override_settings(ADMINS=(('admin', 'admin@example.com'),),
-                       EMAIL_SUBJECT_PREFIX="")
     def test__it(self):
         class DummySelf(object):
             __module__ = '__module__'
@@ -37,4 +37,32 @@ options: test=option
 
 result:
 Stored
+""")
+
+    def test__unexpected_error_occurred(self):
+        class DummySelf(object):
+            __module__ = '__module__'
+
+        wrapper = self._makeOne("Title")
+
+        def wrapped(self, reporter, *args, **options):
+            reporter.append("Stored")
+            raise Exception("KADOOOOM!!!!!")
+
+        with self.assertRaises(Exception):
+            wrapper(wrapped)(DummySelf(), 'arg', test='option')
+
+        from django.core import mail
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'Title')
+        self.assertEqual(mail.outbox[0].body[:119], """\
+Report of __module__
+args: arg,
+options: test=option
+
+result:
+Stored
+KADOOOOM!!!!!
+
+Traceback (most recent call last):
 """)
