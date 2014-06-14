@@ -1,9 +1,70 @@
+"""
+A module for reporting.
+In this module, these two characters are meaningful.
+
+:Reporter:
+    An object to provide interfaces to store, render, send messages.
+
+    * reportmail.reporter.Reporter
+
+:Committer:
+    An callable to make some side-effect telling result message for administrators.
+
+    * reportmail.reporter.console_committer
+    * reportmail.reporter.admin_mail_committer
+
+Internally Reporter uses Committer to tell messages.
+So committers are totally separated from reporters and reporter delegates the sending processing to
+committers.
+"""
 from django.core.mail import mail_admins
 from django.template import Context
 from django.template.loader import get_template
 
 
 class Reporter(object):
+    """ An object to store result messages and send messages by using committer.
+
+    The API of Reporter is quite simple. You can store messages as same way as list, like this:
+
+    >>> reporter = Reporter()
+    >>> reporter.append("The first line")
+    >>> reporter.append("The second line")
+    >>> reporter.commit()
+
+    When the `commit()` method is called, stored messages will be sent to administrators.
+    You can also use committer as a context manager.
+    If you do, you won't need to call `commit()` method explicitly.
+
+    >>> with Reporter() as reporter:
+    >>>     reporter.append("The first line")
+    >>>     reporter.append("The second line")
+
+    This way is better and easier to read. so I recommend to use Reporter as context manager.
+    Notice that the reporter won't handle exceptions by default.
+    If you want reporter to catch exceptions and report about it,
+    write the explicit code like this:
+
+    >>> import traceback
+    >>> with Reporter() as reporter:
+    >>>     try:
+    >>>         # do_something()
+    >>>         reporter.append("Success")
+    >>>     except Exception as e:
+    >>>         reporter.append(str(e) + traceback.format_exc())
+    >>>         raise
+
+    :arg str subject:
+        A subject of message. This value will be deliver for committer directly.
+    :arg str template:
+        A string to specify a template to be used for build result message.
+    :arg  dict base_context:
+        Base context will be provided for the template.
+        By default, empty dict will be used.
+    :arg callable committer:
+        Committer function.
+        By default, admin_mail_committer will be used.
+    """
     def __init__(self, subject, template, base_context=None, committer=None):
         self.subject = subject
         self.template = template
@@ -18,17 +79,25 @@ class Reporter(object):
         self.commit()
 
     def append(self, text):
-        """ Adding a line
+        """ Storing a line of message
+
+        :arg str text: A string of message to store
         """
         self.stored_text.append(text)
 
     def extend(self, text_list):
-        """ Adding multiple lines
+        """ Storing some lines of messages
+
+        :arg list text: A list of Some messages to store
         """
         self.stored_text.extend(text_list)
 
     def render(self):
-        """ Render the text for getting report text
+        """ Rendering result by using stored messages
+
+        The context for template will contain messages you stored
+        as 'stored_text' value.
+        And also it contains values from `base_context` of constructing.
         """
         ctx = self.base_context.copy()
         ctx['stored_text'] = self.stored_text
@@ -36,14 +105,32 @@ class Reporter(object):
 
     def commit(self):
         """ A interface to send the report
+
+        Internally, this method will call `self.committer` by passing
+        `self.subject and result of `self.render()`.
         """
         self.committer(self.subject, self.render())
 
 
 def console_committer(subject, body):
+    """ One of committers to send messages to standard output.
+
+    This committer will simply output the message, separating
+    subject and body by breaking.
+    """
     print(subject)
     print(body)
 
 
 def admin_mail_committer(subject, body):
+    """ One of committers to send messages to Admin Mails.
+
+    This committer depends on django's django.core.mail.mail_admins.
+    So you need to set 'ADMINS' of the settings file.
+    Notice that thin committer will fail silently to avoid
+    causing unexpected error while sending admin mails.
+
+    This committer will simply use the subject as mail subject,
+    and use body as mail body.
+    """
     mail_admins(subject, body, fail_silently=True)
