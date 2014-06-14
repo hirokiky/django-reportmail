@@ -7,14 +7,13 @@ Django library to send 'report' mail.
 Almost django management commands used as night batch processing,
 and then, administrators will want to know the result of it as mail.
 
-Why django-reportmail
-=====================
+At a glance
+===========
 
-Of Cause, you can emit logs and aggregate them by using some another applications like Sentry.
-But in some cases, you can't deploy them and you should send the report as mail.
+Consider a case which is for processing lines of csv by django's management command.
+And then you want to know the result of the command by mail.
 
-Usage
-=====
+Just thing you should do is decorating `handle` method by `apply_reporter` method:
 
 .. code-block:: python
 
@@ -27,7 +26,7 @@ Usage
         @apply_reporter("Title")
         def handle(reporter, filepath, *args, **options):
             for i, l in enumerate(csv.DictReader(open(filepath))):
-                reporter.append('Line {}: processed {l}'.format(i+1, l))
+                reporter.append('Line {}: processed {}'.format(i+1, l))
 
 
 Then, when the command finish, you'll get a admin mail like this::
@@ -37,7 +36,7 @@ Then, when the command finish, you'll get a admin mail like this::
     Body:
         Report of someapp.management.commands.some_of_your_command
         args: path/to/somecsv.csv
-        options:
+        options: settings=None,pythonpath=None,traceback=None,verbosity=1,
 
         result:
         Line1: processed {'somefield': 'somevalue0'}
@@ -46,41 +45,8 @@ Then, when the command finish, you'll get a admin mail like this::
         Line4: processed {'somefield': 'somevalue3'}
         ...
 
-
-Required settings
-=================
-
-First, Add a line 'reportmail' to INSTALLEDAPPS to register this library for your project:
-
-.. code-block:: python
-
-    INSTALLED_APPS = (
-        ...
-        'reportmail',
-    )
-
-
-And also you need to set 'ADMINS' settings.
-Because the above 'apply_reporter' will send the report mail to ADMINS on settings.
-
-.. code-block:: python
-
-    ADMINS = (
-        ('Hiroki KIYOHARA', 'hirokiky@gmail.com'),
-    )
-
-
-Versions
-========
-
-Python:
-
-* 2.7
-* 3.3
-
-Django:
-
-* 1.6
+If you like django-reportmail, please refer `the documentation <http://django-reportmail.readthedocs.org/>`_.
+You can learn about django-reportmail enough to use it on your work.
 
 Resources
 =========

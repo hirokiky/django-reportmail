@@ -7,15 +7,28 @@ from reportmail.reporter import Reporter
 def apply_reporter(subject, template='reportmail/command_report.txt'):
     """ Adding a reporting feature for django command
 
-    You can use thin as decorator for Command.handle.
+    You can use this as decorator for Command.handle.
     and decorated handle() will get admin mail reporter objects as first argument::
 
         @apply_reporter("Title of report", 'path/to/template.txt')
         def handle(reporter, *args, **options):
             ...
 
-    * :arg subject: Title of report
-    * :arg template: Template to use rendering
+    By default, `apply_reporter` will use the `reportmail/command_report.txt` template.
+    To change the template, you can put same name template.
+
+    This decorator provide these additional values for template as context:
+
+    * args: arguments of command calling.
+    * options: option arguments of command calling and some value of enviroments.
+    * command: module path for this command.
+
+    Notice that if the decorated command raises an exception,
+    It will caught it to add the traceback to report mail.
+    After added the error message, raised exception will be reraised.
+
+    :arg subject: Title of report
+    :arg template: Template to use rendering
     """
     def wrapper(handle_func):
         @wraps(handle_func)
