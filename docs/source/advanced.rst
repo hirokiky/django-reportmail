@@ -10,7 +10,7 @@ How to change the mail template
 
 This section you can learn the way to change template used for rendering report mail.
 To change the template, you can simply apply the path to template as the 'template' argument
-for `apply_template`:
+for :func:`apply_reporter() <reportmail.command.apply_reporter()>`:
 
 .. code-block:: python
 
@@ -41,7 +41,8 @@ How to change the way to report
 -------------------------------
 
 Sometimes you want to change the way to report instead of admin mails.
-To change, you can simply set a 'Committer' function to the `reporter.committer` attribute.
+To change, you can simply set a 'Committer' function to the
+:attr:`reportmail.reporter.Reporter.committer` attribute.
 The committer is the function which to get 'subject' and 'body' string as positional argument
 and cause some side-effects:
 
@@ -52,11 +53,11 @@ and cause some side-effects:
     ...     print(body)
     >>> reporter.committer = my_committer
 
-This my_committer is actually same with `reportmail.reporter.console_committer`.
+This my_committer is actually same with :func:`reportmail.reporter.console_committer`.
 django-reportmail provides two committer functions by default:
 
-* `reportmail.reporter.console_committer`: printing out to the standard output
-* `reportmail.reporter.admin_mail_committer`: sending as admin mail (default committer)
+* :func:`reportmail.reporter.admin_mail_committer`: sending as admin mail (default committer)
+* :func:`reportmail.reporter.console_committer`: printing out to the standard output
 
 Conclusion
 ----------
