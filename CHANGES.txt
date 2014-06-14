@@ -1,6 +1,11 @@
 Changes
 =======
 
+1.2.1 (2014-06-14)
+------------------
+
+Cleaned up the default template of report mail.
+
 1.2 (2014-06-07)
 ----------------
 

@@ -33,7 +33,7 @@ class TestReporter(TestCase):
         self.assertEqual(mail.outbox[0].body, """\
 Report of __module__
 args: arg,
-options: test=option
+options: test=option,
 
 result:
 Stored
@@ -55,10 +55,10 @@ Stored
         from django.core import mail
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Title')
-        self.assertEqual(mail.outbox[0].body[:119], """\
+        self.assertEqual(mail.outbox[0].body[:120], """\
 Report of __module__
 args: arg,
-options: test=option
+options: test=option,
 
 result:
 Stored
