@@ -41,7 +41,24 @@ How to change the way to report
 -------------------------------
 
 Sometimes you want to change the way to report instead of admin mails.
-To change, you can simply set a 'Committer' function to the
+To change, you can simply pass the `committer` argument for :func:`apply_reporter() <reportmail.command.apply_reporter()>`.
+For instance, If you want the reporter to output result to standard output,
+you can use :func:`reportmail.reporter.console_committer()` like this:
+
+.. code-block:: python
+
+    from reportmail.reporter import console_committer
+
+    >>> class Command(BaseCommand):
+    ...     @apply_reporter("Title", committer=console_committer)
+    ...     def handle(reporter, *args, **kwargs):
+
+django-reportmail provides two committer functions from it's own:
+
+* :func:`reportmail.reporter.admin_mail_committer`: sending as admin mail (default committer)
+* :func:`reportmail.reporter.console_committer`: printing out to the standard output
+
+Or, you can simply set a 'Committer' function to the
 :attr:`reportmail.reporter.Reporter.committer` attribute.
 The committer is the function which to get 'subject' and 'body' string as positional argument
 and cause some side-effects:
@@ -53,11 +70,9 @@ and cause some side-effects:
     ...     print(body)
     >>> reporter.committer = my_committer
 
-This my_committer is actually same with :func:`reportmail.reporter.console_committer`.
-django-reportmail provides two committer functions by default:
-
-* :func:`reportmail.reporter.admin_mail_committer`: sending as admin mail (default committer)
-* :func:`reportmail.reporter.console_committer`: printing out to the standard output
+Notice that the implementation of this `my_committer` function is actually
+same with :func:`console_committer <reportmail.reporter.console_committer>`.
+It's not so complex to create committers. Try it cheerfully if you want it.
 
 Conclusion
 ----------

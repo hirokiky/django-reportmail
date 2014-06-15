@@ -4,7 +4,7 @@ from django.test.utils import override_settings
 
 @override_settings(ADMINS=(('admin', 'admin@example.com'),),
                    EMAIL_SUBJECT_PREFIX="")
-class TestReporter(TestCase):
+class TestApplyReporter(TestCase):
     def _makeOne(self, *args):
         from reportmail.command import apply_reporter
         return apply_reporter(*args)

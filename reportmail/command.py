@@ -4,7 +4,7 @@ import traceback
 from reportmail.reporter import Reporter
 
 
-def apply_reporter(subject, template='reportmail/command_report.txt'):
+def apply_reporter(subject, template='reportmail/command_report.txt', committer=None):
     """ Adding a reporting feature for django command
 
     You can use this as decorator for Command.handle.
@@ -29,13 +29,15 @@ def apply_reporter(subject, template='reportmail/command_report.txt'):
 
     :arg subject: Title of report
     :arg template: Template to use rendering
+    :arg committer: Committer function to be passed for the reporter.
     """
     def wrapper(handle_func):
         @wraps(handle_func)
         def wrapped(self, *args, **options):
             with Reporter(subject, template,
                           base_context={'args': args, 'options': options,
-                                        'command': self.__module__}) as reporter:
+                                        'command': self.__module__},
+                          committer=committer) as reporter:
                 try:
                     ret = handle_func(self, reporter, *args, **options)
                 except Exception as e:
