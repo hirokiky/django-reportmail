@@ -56,6 +56,7 @@ you can use :func:`reportmail.reporter.console_committer()` like this:
 django-reportmail provides two committer functions from it's own:
 
 * :func:`reportmail.reporter.admin_mail_committer`: sending as admin mail (default committer)
+* :func:`reportmail.reporter.manager_mail_committer`: sending as manager mail
 * :func:`reportmail.reporter.console_committer`: printing out to the standard output
 
 Or, you can simply set a 'Committer' function to the

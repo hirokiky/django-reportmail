@@ -75,3 +75,22 @@ class TestAdminMailCommitter(TestCase):
         self.assertEqual(mail.outbox[0].to, ['admin@example.com'])
         self.assertEqual(mail.outbox[0].subject, "Admin mail")
         self.assertEqual(mail.outbox[0].body, "This is test")
+
+
+class TestMangerMailCommitter(TestCase):
+    def _callFUT(self, *args, **kwargs):
+        from reportmail.reporter import manager_mail_committer
+        return manager_mail_committer(*args, **kwargs)
+
+    @override_settings(SERVER_EMAIL='server@example.com',
+                       MANAGERS=(('Manager', 'manager@example.com'),),
+                       EMAIL_SUBJECT_PREFIX="")
+    def test__commit(self):
+        self._callFUT("Manager mail", "This is test")
+
+        from django.core import mail
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].from_email, 'server@example.com')
+        self.assertEqual(mail.outbox[0].to, ['manager@example.com'])
+        self.assertEqual(mail.outbox[0].subject, "Manager mail")
+        self.assertEqual(mail.outbox[0].body, "This is test")

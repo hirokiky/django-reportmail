@@ -12,12 +12,13 @@ In this module, these two characters are meaningful.
 
     * reportmail.reporter.console_committer
     * reportmail.reporter.admin_mail_committer
+    * reportmail.reporter.manager_mail_committer
 
 Internally Reporter uses Committer to tell messages.
 So committers are totally separated from reporters and reporter delegates the sending processing to
 committers.
 """
-from django.core.mail import mail_admins
+from django.core.mail import mail_admins, mail_managers
 from django.template import Context
 from django.template.loader import get_template
 
@@ -134,3 +135,17 @@ def admin_mail_committer(subject, body):
     and use body as mail body.
     """
     mail_admins(subject, body, fail_silently=True)
+
+
+def manager_mail_committer(subject, body):
+    """ One of committers to send messages to Manager Mails.
+
+    This committer depends on django's django.core.mail.mail_managers.
+    So you need to set 'MANAGERS' of the settings file.
+    Notice that thin committer will fail silently to avoid
+    causing unexpected error while sending manager mails.
+
+    This committer will simply use the subject as mail subject,
+    and use body as mail body.
+    """
+    mail_managers(subject, body, fail_silently=True)
