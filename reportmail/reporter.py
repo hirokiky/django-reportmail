@@ -1,19 +1,15 @@
 """
+
 A module for reporting.
-In this module, these two characters are meaningful.
 
-:Reporter:
-    An object to provide interfaces to store, render, send messages.
+.. autosummary::
 
-    * reportmail.reporter.Reporter
+    Reporter
+    console_committer
+    admin_mail_committer
+    manager_mail_committer
 
-:Committer:
-    An callable to make some side-effect telling result message for administrators.
-
-    * reportmail.reporter.console_committer
-    * reportmail.reporter.admin_mail_committer
-    * reportmail.reporter.manager_mail_committer
-
+`Committers` is callable to make some side-effect telling result message for administrators.
 Internally Reporter uses Committer to tell messages.
 So committers are totally separated from reporters and reporter delegates the sending processing to
 committers.
