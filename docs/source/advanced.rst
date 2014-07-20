@@ -19,7 +19,7 @@ for :func:`apply_reporter() <reportmail.command.apply_reporter()>`:
 
     class Command(BaseCommand):
         @apply_reporter("Title", template='yourapp/dataimport_report.txt')
-        def handle(reporter, *args, **options):
+        def handle(self, reporter, *args, **options):
             pass
 
 By default, it uses `reportmail/command_report.txt`.
@@ -51,7 +51,7 @@ you can use :func:`reportmail.reporter.console_committer()` like this:
 
     >>> class Command(BaseCommand):
     ...     @apply_reporter("Title", committer=console_committer)
-    ...     def handle(reporter, *args, **kwargs):
+    ...     def handle(self, reporter, *args, **kwargs):
 
 django-reportmail provides two committer functions from it's own:
 

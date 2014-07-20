@@ -17,12 +17,12 @@ by :func:`reportmail.command.apply_reporter()`:
 
     class Command(BaseCommand):
         @apply_reporter("Title")
-        def handle(reporter, filepath, *args, **options):
+        def handle(self, reporter, filepath, *args, **options):
             for i, l in enumerate(csv.DictReader(open(filepath))):
                 reporter.append('Line {}: processed {l}'.format(i+1, l))
 
 
-Then the `handle` method will take a :class:`reportmail.reporter.Reporter` object as the first argument.
+Then the `handle` method will take a :class:`reportmail.reporter.Reporter` object after `self`.
 This reporter object is an interface to store messages which you want to notify to administrators.
 
 Reporter

@@ -24,7 +24,7 @@ Just thing you should do is decorating `handle` method by `apply_reporter` metho
 
     class Command(BaseCommand):
         @apply_reporter("Title")
-        def handle(reporter, filepath, *args, **options):
+        def handle(self, reporter, filepath, *args, **options):
             for i, l in enumerate(csv.DictReader(open(filepath))):
                 reporter.append('Line {}: processed {}'.format(i+1, l))
 

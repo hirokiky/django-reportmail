@@ -8,10 +8,10 @@ def apply_reporter(subject, template='reportmail/command_report.txt', committer=
     """ Adding a reporting feature for django command
 
     You can use this as decorator for Command.handle.
-    and decorated handle() will get admin mail reporter objects as first argument::
+    and decorated handle() will get admin mail reporter object after `self`::
 
         @apply_reporter("Title of report", 'path/to/template.txt')
-        def handle(reporter, *args, **options):
+        def handle(self, reporter, *args, **options):
             ...
 
     By default, `apply_reporter` will use the `reportmail/command_report.txt` template.
