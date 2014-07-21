@@ -31,8 +31,12 @@ Because this library will send the report mail to 'ADMINS' on settings.
         ('Hiroki KIYOHARA', 'hirokiky@gmail.com'),
     )
 
-Internally, the reason of setting 'ADMINS' is that django-reportmail will send mail by
-calling `django.core.mail.admin_mails`.
+    SERVER_EMAIL = 'noreply@example.com'
+
+Internally, the reason of setting 'ADMINS' and 'SERVER_EMAIL' is that django-reportmail
+will send mail by calling `django.core.mail.mail_admins()`.
+For more detail, please check out the official documentation about `mail_admins`.
+https://docs.djangoproject.com/en/1.6/topics/email/#mail-admins
 
 Requires
 --------
