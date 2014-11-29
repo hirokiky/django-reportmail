@@ -1,3 +1,3 @@
 include LICENSE
 include *.txt *.ini *.cfg *.rst
-recursive-include reportmail *.ico *.png *.css *.gif *.jpg *.txt *.js *.html *.xml
+recursive-include reportmail *.txt
