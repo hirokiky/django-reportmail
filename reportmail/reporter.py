@@ -68,6 +68,7 @@ class Reporter(object):
         self.stored_text = []
         self.base_context = base_context if base_context is not None else {}
         self.committer = committer if committer is not None else admin_mail_committer
+        self.aborted = False
 
     def __enter__(self):
         return self
@@ -100,13 +101,17 @@ class Reporter(object):
         ctx['stored_text'] = self.stored_text
         return get_template(self.template).render(Context(ctx))
 
+    def abort(self):
+        self.aborted = True
+
     def commit(self):
         """ A interface to send the report
 
         Internally, this method will call `self.committer` by passing
         `self.subject and result of `self.render()`.
         """
-        self.committer(self.subject, self.render())
+        if not self.aborted:
+            self.committer(self.subject, self.render())
 
 
 def console_committer(subject, body):
