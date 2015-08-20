@@ -102,6 +102,13 @@ class Reporter(object):
         return get_template(self.template).render(Context(ctx))
 
     def abort(self):
+        """  Aborting commit of this reporter.
+
+        If this method is called, `self.commit()` will no longer send
+        results.
+
+        refs https://github.com/hirokiky/django-reportmail/issues/7
+        """
         self.aborted = True
 
     def commit(self):

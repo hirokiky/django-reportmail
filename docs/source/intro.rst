@@ -73,6 +73,22 @@ or :meth:`extend() <reportmail.reporter.Reporter.extend()>`.
 If some unexpected error occurred while processing the command,
 :func:`apply_reporter <reportmail.command.apply_reporter>` will catch the error and report it and it's traceback.
 
+Aborting report
+---------------
+
+If you want to abort to send any reports (mails),
+call :meth:`abort() <reportmail.reporter.Reporter.abort()>` of :class:`Reporter <reportmail.reporter.Reporter>`.
+It's useful in case you don't want to get any messages.
+
+.. code-block:: python
+
+    class Command(BaseCommand):
+        @apply_reporter("Title")
+        def handle(self, reporter, *args, **options):
+            ...
+            reporter.abort()  # Nothing to say
+
+
 Always in motion is the future...
 ---------------------------------
 
