@@ -29,6 +29,21 @@ class TestReporter(TestCase):
         actual = target.render()
         self.assertEqual(actual, "test1\ntest2\n\nadditional\n")
 
+    def test__abort(self):
+        self.called = False
+
+        def dummy_committer(subject, body):
+            self.called = True
+
+        target = self._makeOne("", '')
+        self.assertFalse(target.aborted)
+
+        target.abort()
+        self.assertTrue(target.aborted)
+
+        target.commit()
+        self.assertFalse(self.called)
+
     def test__commit(self):
         self.actual_subject = None
         self.actual_body = None

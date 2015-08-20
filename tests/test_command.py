@@ -5,9 +5,9 @@ from django.test.utils import override_settings
 @override_settings(ADMINS=(('admin', 'admin@example.com'),),
                    EMAIL_SUBJECT_PREFIX="")
 class TestApplyReporter(TestCase):
-    def _makeOne(self, *args):
+    def _makeOne(self, *args, **kwargs):
         from reportmail.command import apply_reporter
-        return apply_reporter(*args)
+        return apply_reporter(*args, **kwargs)
 
     def test__it(self):
         class DummySelf(object):
@@ -30,6 +30,38 @@ class TestApplyReporter(TestCase):
         from django.core import mail
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Title')
+        self.assertEqual(mail.outbox[0].body, """\
+Report of __module__
+args: arg,
+options: test=option,
+
+result:
+Stored
+""")
+
+    def test__additional_context(self):
+        class DummySelf(object):
+            __module__ = '__module__'
+        wrapper = self._makeOne("Title", additional_context={'more': 'data'})
+
+        def wrapped(self, reporter, *args, **options):
+            reporter.append("Stored")
+            return reporter, args, options
+
+        r, a, o = wrapper(wrapped)(DummySelf(), 'arg', test='option')
+        self.assertEqual(r.subject, "Title")
+        self.assertEqual(r.template, 'reportmail/command_report.txt')
+        self.assertEqual(r.base_context, {'args': a, 'options': o,
+                                          'command': '__module__',
+                                          'more': 'data'})
+        self.assertEqual(r.stored_text, ["Stored"])
+        self.assertEqual(a, ('arg',))
+        self.assertEqual(o, {'test': 'option'})
+
+        from django.core import mail
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'Title')
+        # Template doesn't use the 'more' key, so can't test the rendered output
         self.assertEqual(mail.outbox[0].body, """\
 Report of __module__
 args: arg,
